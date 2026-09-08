@@ -3,6 +3,8 @@
   --brand-icon-size: 22px;
   --brand-text-size: 1.08rem;
   --brand-gap: 8px;
+  --brand-text-stroke-width: 2px;
+  --brand-text-stroke-color: #0000ff;
   --nav-glass-base: rgba(255, 255, 255, 0.1);
   --nav-glass-tint: rgba(255, 255, 255, 0.08);
   --nav-glass-glow: rgba(255, 255, 255, 0.22);
@@ -258,6 +260,9 @@ a {
   font-size: var(--brand-text-size);
   font-weight: 700;
   color: var(--nav-ink);
+  /* 像素描边：用整像素多方向 text-shadow 拼成方块外框（-webkit-text-stroke 是平滑抗锯齿，
+     不贴合像素风）。具体偏移量由 common.js 按 --brand-text-stroke-width 生成后写到内联样式。 */
+  text-shadow: none;
 }
 
 .brand::before {
@@ -3344,7 +3349,7 @@ body.lightbox-open {
   width: 0;
   z-index: -9999;
   pointer-events: none;
-  background: #735de0;
+  background: #0000ff;
 }
 .page-sweep.stripes::before {
   content: '';
@@ -3355,8 +3360,8 @@ body.lightbox-open {
   width: 100vw;
   background: repeating-linear-gradient(
     90deg,
-    #735de0 0px,
-    #735de0 2px,
+    #0000ff 0px,
+    #0000ff 2px,
     transparent 2px,
     transparent 18px
   );
@@ -3583,4 +3588,13 @@ html {
 }
 .avatar-option {
   border-radius: 50% !important;
+}
+
+/* ==========================================================
+   gamedev：全站所有图片显示禁用抗锯齿（最近邻采样，像素风）
+   —— 覆盖 <img>、CSS background-image 等所有位图缩放
+   ========================================================== */
+* {
+  image-rendering: pixelated;
+  -webkit-image-rendering: pixelated;
 }

@@ -122,6 +122,55 @@
     root.setProperty("--brand-icon-size", logoSize);
     root.setProperty("--brand-gap", brandGap);
 
+    // —— 像素描边：整像素多方向 text-shadow 拼成方块外框（-webkit-text-stroke 是平滑抗锯齿，
+    //    不贴合像素风）。宽度取整像素，默认读 CSS 变量 --brand-text-stroke-width，可被 site.json 覆盖。
+    const parsePxNumber = (value) => {
+      if (typeof value === "number") {
+        return Number.isFinite(value) && value > 0 ? value : 0;
+      }
+      if (typeof value !== "string") return null;
+      const m = /^(\d+(?:\.\d+)?)\s*px$/i.exec(value.trim());
+      if (!m) return null;
+      return Math.max(0, Number(m[1]));
+    };
+
+    const configStrokeWidth = normalizeCssSize(
+      brand.textStrokeWidth ?? brand.strokeWidth ?? config?.brandTextStrokeWidth,
+      null
+    );
+    const rootStrokeWidth =
+      getComputedStyle(document.documentElement).getPropertyValue("--brand-text-stroke-width") || "";
+    const strokeColor =
+      (typeof brand.textStrokeColor === "string" && brand.textStrokeColor.trim()) ||
+      (typeof config?.brandTextStrokeColor === "string" && config?.brandTextStrokeColor.trim()) ||
+      (getComputedStyle(document.documentElement).getPropertyValue("--brand-text-stroke-color") || "").trim() ||
+      "#0000ff";
+
+    const parsedStroke = parsePxNumber(configStrokeWidth);
+    const parsedRoot = parsePxNumber(rootStrokeWidth);
+    const strokeWidthPx = parsedStroke !== null ? parsedStroke : parsedRoot !== null ? parsedRoot : 1;
+    const strokeWidthBlocks = Math.round(strokeWidthPx);
+
+    let pixelShadow = "";
+    if (strokeWidthBlocks > 0) {
+      const shadows = [];
+      for (let t = 1; t <= strokeWidthBlocks; t += 1) {
+        for (let dy = -t; dy <= t; dy += 1) {
+          for (let dx = -t; dx <= t; dx += 1) {
+            // 正方形环：max(|dx|,|dy|) == t → 方块外扩，无斜切缺口，保持像素块一致
+            if (Math.max(Math.abs(dx), Math.abs(dy)) === t) {
+              shadows.push(`${dx}px ${dy}px 0 ${strokeColor}`);
+            }
+          }
+        }
+      }
+      pixelShadow = shadows.join(",");
+    }
+
+    document.querySelectorAll(".brand").forEach((el) => {
+      el.style.textShadow = pixelShadow;
+    });
+
     const brandText =
       (typeof brand.text === "string" && brand.text.trim()) ||
       (typeof config?.brandText === "string" && config?.brandText.trim());
@@ -193,7 +242,11 @@
       if (typeof value !== "string") return;
       const text = value.trim();
       if (!text) return;
+      // 导航色变量在 styles.css 里同时挂在 html[data-theme] 与 body[data-theme]，
+      // 而主题切换只更新 body 的 data-theme，因此必须把配置值同时写到 html 和 body，
+      // 否则 body 上较新的主题声明会盖住 html 上传给后代的内联配置（navInk 等不生效）。
       root.setProperty(name, text);
+      if (document.body) document.body.style.setProperty(name, text);
     };
 
     // Quick mode: user adjusts only 4 knobs in site.json, detailed values are auto-derived.

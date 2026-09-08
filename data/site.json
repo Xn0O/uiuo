@@ -3,6 +3,10 @@
   "brandIcon": "./assets/Home_Toy/M_0.png",
   "brandIconSize": "64px",
   "brandText": "UiUo",
+  "brandTextSize": "3rem",
+  "brandTextStrokeWidth": "4px",
+  "brandTextStrokeColor": "#0000ff",
+  "navInk": "#ffffff",
   "navItems": [],
   "defaultTheme": "light",
   "themes": {

@@ -5,7 +5,7 @@
   var TRANS_KEY = 'vb_page_sweep';
   var sweeping = false;
 
-  // ---- IN: every page gets a full-screen purple block that slides left ----
+  // ---- IN: every page gets a full-screen blue block that slides left ----
   function playSlideIn() {
     // Reset any leftover state
     sweep.style.transition = 'none';
