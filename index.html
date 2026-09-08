@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <title>开发日志 - Gamedev</title>
+    <script>document.documentElement.dataset.theme=sessionStorage.getItem("vb_theme")==="dark"?"dark":"light"</script>
+    <link rel="stylesheet" href="./styles.css?v=8" />
+  </head>
+  <body data-page="blog" data-theme="light">
+    <header class="top-nav shell">
+      <a class="brand" href="./index.html">Gamedev</a>
+      <button id="theme-toggle" class="btn theme-toggle" type="button" aria-label="切换主题">切换主题</button>
+    </header>
+
+    <section class="page-hero devlog-hero">
+      <img data-hero-image class="hero-image" alt="开发日志头图" draggable="false" />
+      <div class="hero-copy">
+        <p class="eyebrow" data-page-hero="eyebrow">Game Dev Log</p>
+        <h1 data-page-hero="title">开发日志</h1>
+      </div>
+    </section>
+
+    <main class="shell page-main">
+      <section class="toolbar-block block blog-toolbar">
+        <div class="blog-search-row">
+          <label class="sr-only" for="blog-search-input">搜索日志</label>
+          <input id="blog-search-input" class="blog-search-input" type="search" placeholder="搜索标题 / 摘要 / 标签" />
+          <button id="blog-search-clear" class="btn" type="button">清空</button>
+        </div>
+        <div id="blog-tag-filter" class="chip-row" aria-label="开发日志标签"></div>
+        <p id="blog-filter-meta" class="blog-filter-meta"></p>
+      </section>
+
+      <section class="card-grid blog-list" id="blog-grid"></section>
+      <section class="blog-pagination" id="blog-pagination" aria-label="开发日志分页" hidden>
+        <button class="btn" id="blog-prev" type="button">上一页</button>
+        <p class="blog-page-info" id="blog-page-info">第 1 / 1 页</p>
+        <button class="btn" id="blog-next" type="button">下一页</button>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p data-site="footer-line1">Copyright © 2026 Nino</p>
+      <p data-site="footer-line2">All rights reserved.</p>
+    </footer>
+
+    <script src="./js/common.js?v=4"></script>
+    <script src="./js/blog.js"></script>
+    <script src="./js/hero-dots.js?v=9"></script>
+    <div id="page-sweep" class="page-sweep"></div>
+    <script src="./js/page-transition.js"></script>
+  </body>
+</html>

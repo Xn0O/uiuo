@@ -1,0 +1,45 @@
+{
+  "title": "no",
+  "brandIcon": "./assets/Home_Toy/M_0.png",
+  "brandIconSize": "64px",
+  "brandText": "UiUo",
+  "navItems": [],
+  "defaultTheme": "light",
+  "themes": {
+    "light": {
+      "bg": "#f7f7f7",
+      "surface": "#ffffff",
+      "surfaceAlt": "#e8e8e8",
+      "text": "#0f0f0f",
+      "muted": "#303030",
+      "accent": "#101010"
+    },
+    "dark": {
+      "bg": "#0d0d0d",
+      "surface": "#1c1c1c",
+      "surfaceAlt": "#2a2a2a",
+      "text": "#f5f5f5",
+      "muted": "#b3b3b3",
+      "accent": "#f2f2f2"
+    }
+  },
+  "assetCdn": {
+    "enabled": false
+  },
+  "footer": {
+    "line1": "Copyright © 2026 uiuo",
+    "line2": "nino"
+  },
+  "headerImages": {
+    "default": "./assets/Home_Site/B_1.png",
+    "home": "./assets/Home_Site/B_1.png",
+    "blog": "./assets/Home_Site/B_1.png"
+  },
+  "pageHeroTexts": {
+    "blog": {
+      "eyebrow": "",
+      "title": "Blog"
+    }
+  },
+  "commentEnabled": false
+}

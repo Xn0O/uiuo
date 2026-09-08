@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <title>文章 - Gamedev</title>
+    <script>document.documentElement.dataset.theme=sessionStorage.getItem("vb_theme")==="dark"?"dark":"light"</script>
+    <link rel="stylesheet" href="./styles.css?v=8" />
+  </head>
+  <body data-page="blog" data-theme="light">
+    <header class="top-nav shell">
+      <a class="brand" href="./index.html">Gamedev</a>
+      <button id="theme-toggle" class="btn theme-toggle" type="button" aria-label="切换主题">切换主题</button>
+    </header>
+
+    <main class="shell page-main">
+      <section class="page-hero">
+        <img data-hero-image class="hero-image" alt="文章头图" draggable="false" />
+        <div class="hero-copy block">
+          <a class="back-link" href="./index.html">&lt; 返回日志</a>
+          <h1 id="post-title">加载中...</h1>
+          <p id="post-meta"></p>
+        </div>
+      </section>
+
+      <article class="post-content block markdown-content" id="post-content"></article>
+    </main>
+
+    <footer class="site-footer shell">
+      <p data-site="footer-line1">Copyright © 2026 Nino</p>
+      <p data-site="footer-line2">All rights reserved.</p>
+    </footer>
+
+    <script src="./js/common.js?v=4"></script>
+    <script src="./js/blog-post.js"></script>
+    <div id="page-sweep" class="page-sweep"></div>
+    <script src="./js/page-transition.js"></script>
+  </body>
+</html>
