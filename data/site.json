@@ -28,7 +28,9 @@
     }
   },
   "assetCdn": {
-    "enabled": false
+    "enabled": true,
+    "base": "https://cdn.jsdelivr.net/gh/Xn0O/uiuo@main",
+    "useOnLocal": false
   },
   "footer": {
     "line1": "Copyright © 2026 uiuo",
