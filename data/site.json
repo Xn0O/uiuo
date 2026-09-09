@@ -28,7 +28,7 @@
     }
   },
   "assetCdn": {
-    "enabled": true,
+    "enabled": false,
     "base": "https://cdn.osyb.cn/gh/xn0o/uiuo",
     "useOnLocal": false
   },
