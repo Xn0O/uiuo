@@ -37,9 +37,9 @@
     "line2": "nino"
   },
   "headerImages": {
-    "default": "./assets/Home_Site/B_1.png",
-    "home": "./assets/Home_Site/B_1.png",
-    "blog": "./assets/Home_Site/B_1.png"
+    "default": "./assets/Home_Site/04.png",
+    "home": "./assets/Home_Site/04.png",
+    "blog": "./assets/Home_Site/04.png"
   },
   "pageHeroTexts": {
     "blog": {

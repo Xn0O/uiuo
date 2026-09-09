@@ -3391,9 +3391,9 @@ body[data-page="blog"]:not(:has(.back-link)) .page-hero.devlog-hero {
 body[data-page="blog"]:not(:has(.back-link)) .devlog-hero .hero-image {
   aspect-ratio: auto;
   width: 100%;
-  height: clamp(300px, 46vh, 620px);
-  /* 宽屏保底：比例不扁过约 3:1，避免超宽屏又变扁条 */
-  min-height: min(100vw / 3, 660px);
+  height: clamp(120px, 23vh, 300px);
+  /* 宽屏保底：比例不扁过约 5:1，避免超宽屏又变扁条 */
+  min-height: min(100vw / 5, 320px);
   object-fit: cover;
   object-position: center;
   display: block;
