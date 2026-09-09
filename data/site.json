@@ -32,6 +32,23 @@
     "base": "https://cdn.osyb.cn/gh/xn0o/uiuo",
     "useOnLocal": false
   },
+  "galleryButton": {
+    "enabled": true,
+    "href": "./gallery.html",
+    "label": "画廊",
+    "image": "./assets/Home_Site/gallery.png",
+    "size": "48px",
+    "fit": "cover"
+  },
+  "themeToggleButton": {
+    "enabled": true,
+    "size": "48px",
+    "fit": "cover",
+    "images": {
+      "light": "./assets/Home_Site/light.png",
+      "dark": "./assets/Home_Site/dark.png"
+    }
+  },
   "footer": {
     "line1": "Copyright © 2026 uiuo",
     "line2": "nino"

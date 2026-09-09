@@ -553,6 +553,8 @@
           applyBrandConfig(config);
           applyNavGlassConfig(config);
           applyNavConfig(config);
+          applyGalleryButton(config);
+          applyThemeToggleButton(config);
           setupAutoHideNav(config);
           setupBackToTop();
           applyPageHeroText(config);
@@ -748,23 +750,97 @@
     setTheme(selected);
   }
 
+  function syncThemeToggleIcon(btn) {
+    const img = btn.querySelector(".theme-toggle-icon");
+    if (!img) return;
+    const images = btn._themeToggleImages;
+    if (!images) return;
+    const current = getTheme();
+    const src = current === "dark" ? images.dark || images.light : images.light || images.dark;
+    if (!src) return;
+    if (img.getAttribute("src") !== src) {
+      img.src = src;
+    }
+    if (img.hidden) {
+      img.hidden = false;
+    }
+  }
+
   function setupThemeToggle() {
     const btn = document.getElementById("theme-toggle");
     if (!btn) return;
+    const img = btn.querySelector(".theme-toggle-icon");
+    const text = btn.querySelector(".theme-toggle-text");
 
-    const syncLabel = () => {
+    const sync = () => {
       const current = getTheme();
-      btn.textContent = "";
-      btn.setAttribute("aria-label", current === "dark" ? "切换到浅色主题" : "切换到深色主题");
-      btn.title = current === "dark" ? "切换到浅色主题" : "切换到深色主题";
+      const label = current === "dark" ? "切换到浅色主题" : "切换到深色主题";
+      btn.setAttribute("aria-label", label);
+      btn.title = label;
+
+      if (btn._themeToggleImages && (btn._themeToggleImages.light || btn._themeToggleImages.dark)) {
+        if (text) text.hidden = true;
+        syncThemeToggleIcon(btn);
+      } else {
+        // 未配图：隐藏文字与 img，回退到默认的 ::before 月亮图标按钮
+        if (img) img.hidden = true;
+        if (text) text.hidden = true;
+      }
     };
 
     btn.addEventListener("click", () => {
       setTheme(getTheme() === "dark" ? "light" : "dark");
-      syncLabel();
+      sync();
     });
 
-    syncLabel();
+    sync();
+  }
+
+  function applyThemeToggleButton(config) {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+
+    const cfg =
+      config?.themeToggleButton && typeof config.themeToggleButton === "object"
+        ? config.themeToggleButton
+        : {};
+    const img = btn.querySelector(".theme-toggle-icon");
+    const text = btn.querySelector(".theme-toggle-text");
+    btn._themeToggleImages = null;
+    btn.classList.remove("image-mode");
+
+    const resolve = (value) => {
+      if (typeof value !== "string" || !value.trim()) return "";
+      const url = resolveAssetUrl(value.trim(), { config });
+      return url || "";
+    };
+    const fallback = resolve(cfg.image);
+    const lightSrc = resolve(cfg.images?.light) || fallback;
+    const darkSrc = resolve(cfg.images?.dark) || fallback;
+
+    if (cfg.enabled === false || (!lightSrc && !darkSrc)) {
+      if (img) {
+        img.hidden = true;
+        img.removeAttribute("src");
+      }
+      if (text) text.hidden = true; // 回退到默认 ::before 月亮图标按钮
+      return;
+    }
+
+    btn._themeToggleImages = { light: lightSrc, dark: darkSrc };
+    btn.classList.add("image-mode");
+    if (text) text.hidden = true;
+
+    // 尺寸 / 裁切：写成 CSS 变量，交给 CSS 统一渲染
+    const setProp = (name, value) => {
+      if (typeof value === "string" && value.trim()) {
+        btn.style.setProperty(name, value.trim());
+      }
+    };
+    setProp("--ttbtn-size", cfg.size);
+    setProp("--ttbtn-fit", cfg.fit);
+
+    syncThemeToggleIcon(btn);
   }
 
   function applyHeaderImage(config) {
@@ -877,6 +953,50 @@
     const footer = config?.footer && typeof config.footer === "object" ? config.footer : {};
     setSiteText("footer-line1", footer.line1 ?? config?.footerLine1);
     setSiteText("footer-line2", footer.line2 ?? config?.footerLine2);
+  }
+
+  function applyGalleryButton(config) {
+    const cfg = config?.galleryButton && typeof config.galleryButton === "object" ? config.galleryButton : {};
+    const buttons = document.querySelectorAll(".nav-gallery-btn");
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      if (cfg.enabled === false) {
+        btn.hidden = true;
+        return;
+      }
+
+      if (typeof cfg.href === "string" && cfg.href.trim()) {
+        btn.href = cfg.href.trim();
+      }
+
+      const img = btn.querySelector("img");
+      const imageValue = typeof cfg.image === "string" ? cfg.image.trim() : "";
+      if (img) {
+        const url = resolveAssetUrl(imageValue, { config });
+        if (url) {
+          img.src = url;
+          img.alt = "";
+        }
+      }
+
+      // 图标按钮没有文字，label 用作可访问名 + 悬浮提示
+      const labelText =
+        (typeof cfg.label === "string" && cfg.label.trim()) ||
+        btn.getAttribute("aria-label") ||
+        "画廊";
+      btn.setAttribute("aria-label", labelText);
+      btn.setAttribute("title", labelText);
+
+      // 尺寸 / 裁切：写成 CSS 变量，交给 CSS 统一渲染，改 site.json 即可换样式
+      const setProp = (name, value) => {
+        if (typeof value === "string" && value.trim()) {
+          btn.style.setProperty(name, value.trim());
+        }
+      };
+      setProp("--gbtn-size", cfg.size);
+      setProp("--gbtn-fit", cfg.fit);
+    });
   }
 
   function markActiveNav() {

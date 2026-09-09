@@ -1,18 +1,18 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="googlebot" content="noindex, nofollow" />
-    <title>文章 - Gamedev</title>
+    <title>画廊 - Gamedev</title>
     <script>document.documentElement.dataset.theme=sessionStorage.getItem("vb_theme")==="dark"?"dark":"light"</script>
     <link rel="stylesheet" href="./styles.css?v=24" />
     <!-- 预载像素字体：提前并行下载，缩短首屏等待 -->
     <link rel="preload" as="font" type="font/woff2" href="./assets/fonts/fusion-pixel-12px-proportional-latin.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="./assets/fonts/fusion-pixel-12px-proportional-zh_hans.woff2" crossorigin />
   </head>
-  <body data-page="blog" data-theme="light">
+  <body data-page="gallery" data-theme="light">
     <header class="top-nav shell">
       <a class="brand" href="./index.html">Gamedev</a>
       <a class="nav-gallery-btn" href="./gallery.html" aria-label="画廊">
@@ -24,17 +24,13 @@
       </button>
     </header>
 
-    <main class="shell page-main">
-      <section class="page-hero">
-        <img data-hero-image class="hero-image" alt="文章头图" draggable="false" />
-        <div class="hero-copy block">
-          <a class="back-link" href="./index.html">&lt; 返回日志</a>
-          <h1 id="post-title">加载中...</h1>
-          <p id="post-meta"></p>
-        </div>
+    <main class="shell page-main gallery-main">
+      <section class="gallery-hero block">
+        <a class="back-link" href="./index.html">&lt; 返回日志</a>
+        <h1>画廊</h1>
       </section>
 
-      <article class="post-content block markdown-content" id="post-content"></article>
+      <section class="gallery-grid" id="gallery-grid" aria-label="画廊图片"></section>
     </main>
 
     <footer class="site-footer shell">
@@ -43,7 +39,7 @@
     </footer>
 
     <script src="./js/common.js?v=11"></script>
-    <script src="./js/blog-post.js"></script>
+    <script src="./js/gallery.js"></script>
     <div id="page-sweep" class="page-sweep"></div>
     <script src="./js/page-transition.js"></script>
   </body>

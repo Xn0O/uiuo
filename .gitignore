@@ -1,2 +1,5 @@
 .DS_Store
 Thumbs.db
+tools/__pycache__/gallery_build.cpython-314.pyc
+tools/gallery_build.py
+刷新画廊.command
