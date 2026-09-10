@@ -49,6 +49,12 @@
       "dark": "./assets/Home_Site/dark.png"
     }
   },
+  "imageLightbox": {
+    "enabled": true,
+    "size": "48px",
+    "opacity": 0.85,
+    "offset": "10px"
+  },
   "footer": {
     "line1": "Copyright © 2026 uiuo",
     "line2": "nino"

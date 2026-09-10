@@ -1688,6 +1688,36 @@
     img.className = "image-lightbox-img";
     img.alt = "";
 
+    // 大图外层：包住图片，让右下角的 brandIcon 水印贴着「大图」自身定位
+    const stage = document.createElement("div");
+    stage.className = "image-lightbox-stage";
+    stage.appendChild(img);
+
+    const brandMark = document.createElement("span");
+    brandMark.className = "image-lightbox-brand";
+    brandMark.setAttribute("aria-hidden", "true");
+
+    // 水印开关 / 大小 / 透明度：读 data/site.json → imageLightbox
+    const brandCfg =
+      activeSiteConfig?.imageLightbox && typeof activeSiteConfig.imageLightbox === "object"
+        ? activeSiteConfig.imageLightbox
+        : {};
+    if (brandCfg.enabled === false) {
+      brandMark.hidden = true;
+    } else {
+      const setBrandVar = (name, value) => {
+        if (typeof value === "string" && value.trim()) {
+          mask.style.setProperty(name, value.trim());
+        } else if (typeof value === "number" && Number.isFinite(value) && value >= 0) {
+          mask.style.setProperty(name, String(value));
+        }
+      };
+      setBrandVar("--lb-brand-size", brandCfg.size);
+      setBrandVar("--lb-brand-opacity", brandCfg.opacity);
+      setBrandVar("--lb-brand-offset", brandCfg.offset);
+      stage.appendChild(brandMark);
+    }
+
     const caption = document.createElement("p");
     caption.className = "image-lightbox-caption";
     caption.hidden = true;
@@ -1729,7 +1759,7 @@
       if (galleryIndex < gallerySources.length - 1) showImage(galleryIndex + 1);
     }
 
-    mask.append(closeBtn, prevBtn, img, nextBtn, caption);
+    mask.append(closeBtn, prevBtn, stage, nextBtn, caption);
     document.body.appendChild(mask);
 
     const close = () => {
