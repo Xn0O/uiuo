@@ -1684,19 +1684,21 @@
     nextBtn.setAttribute("aria-label", "下一张");
     nextBtn.innerHTML = "›";
 
-    // 模糊占位层：原图加载期间，用缩略图铺满整屏做模糊底，加载完淡出
-    const blurLayer = document.createElement("div");
-    blurLayer.className = "image-lightbox-blur";
-    blurLayer.setAttribute("aria-hidden", "true");
-
     const img = document.createElement("img");
     img.className = "image-lightbox-img";
     img.alt = "";
 
+    // 加载占位：缩略图铺在大图那一块矩形上（inset:0，尺寸严格等于大图），
+    // 原图流式刷出来的部分会盖在它上面，没刷到的部分露出模糊底，不会空白。
+    const ph = document.createElement("div");
+    ph.className = "image-lightbox-ph";
+    ph.setAttribute("aria-hidden", "true");
+    ph.hidden = true;
+
     // 大图外层：包住图片，让右下角的 brandIcon 水印贴着「大图」自身定位
     const stage = document.createElement("div");
     stage.className = "image-lightbox-stage";
-    stage.appendChild(img);
+    stage.append(ph, img);
 
     const brandMark = document.createElement("span");
     brandMark.className = "image-lightbox-brand";
@@ -1745,29 +1747,32 @@
       galleryIndex = index;
       var entry = gallerySources[index];
 
-      // 先亮出模糊占位（缩略图），原图加载完成后再淡入清晰版
+      const fullSrc = String(entry.src || "").trim();
       const thumbSrc = String(entry.thumb || "").trim();
-      if (thumbSrc) {
-        blurLayer.style.backgroundImage = `url("${thumbSrc}")`;
-        blurLayer.classList.add("is-visible");
+
+      // 缩略图铺在下面当底：它和原图同一块矩形，只负责填住还没刷出来的部分
+      if (thumbSrc && thumbSrc !== fullSrc) {
+        ph.style.backgroundImage = `url("${thumbSrc}")`;
+        ph.classList.remove("is-done");
+        ph.hidden = false;
       } else {
-        blurLayer.style.backgroundImage = "";
-        blurLayer.classList.remove("is-visible");
+        ph.style.backgroundImage = "";
+        ph.hidden = true;
       }
 
-      img.classList.remove("is-loaded");
+      // 关键：原图直接塞给 <img>，让浏览器自己流式解码，
+      // 就能像普通网页那样自上而下一条一条刷出来，而不用等整张下完。
+      // （之前用 new Image() 预载、完成后再换 src，反而把这个过程藏掉了。）
       img.onload = () => {
-        img.classList.add("is-loaded");
-        blurLayer.classList.remove("is-visible");
+        ph.classList.add("is-done"); // 原图完整了，底下的模糊占位淡出
       };
       img.onerror = () => {
-        // 原图失败时保留模糊占位，至少不是空白
-        img.classList.remove("is-loaded");
+        ph.classList.remove("is-done"); // 原图失败就留着占位，至少不是空白
       };
-      img.src = entry.src;
-      if (img.complete && img.naturalWidth > 0) {
-        img.classList.add("is-loaded");
-        blurLayer.classList.remove("is-visible");
+      if (fullSrc) {
+        img.src = fullSrc;
+      } else {
+        img.removeAttribute("src");
       }
 
       img.alt = entry.alt || "大图预览";
@@ -1789,7 +1794,7 @@
       if (galleryIndex < gallerySources.length - 1) showImage(galleryIndex + 1);
     }
 
-    mask.append(blurLayer, closeBtn, prevBtn, stage, nextBtn, caption);
+    mask.append(closeBtn, prevBtn, stage, nextBtn, caption);
     document.body.appendChild(mask);
 
     const close = () => {
@@ -1798,9 +1803,11 @@
       document.body.classList.remove("lightbox-open");
       img.removeAttribute("src");
       img.alt = "";
-      img.classList.remove("is-loaded");
-      blurLayer.classList.remove("is-visible");
-      blurLayer.style.backgroundImage = "";
+      img.onload = null;
+      img.onerror = null;
+      ph.hidden = true;
+      ph.classList.remove("is-done");
+      ph.style.backgroundImage = "";
       caption.textContent = "";
       caption.hidden = true;
       gallerySources = [];

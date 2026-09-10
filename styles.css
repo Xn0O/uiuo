@@ -2451,49 +2451,44 @@ body[data-page="blog"]:not(:has(.back-link)) .page-hero .hero-copy p {
   display: flex;
 }
 
-/* 模糊占位层：原图加载期间用缩略图铺满整屏做模糊底，加载完淡出 */
-.image-lightbox-blur {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(30px) brightness(0.55) saturate(1.05);
-  transform: scale(1.15);
-  opacity: 0;
-  transition: opacity 320ms ease;
-  pointer-events: none;
-}
-
-.image-lightbox-blur.is-visible {
-  opacity: 1;
-}
-
-/* 图片外层：随图片尺寸收缩，方便把水印锚定在「大图」自身右下角 */
+/* 图片外层：随图片尺寸收缩，方便把水印锚定在「大图」自身右下角。
+   overflow:hidden 保证占位层严格裁在大图这块矩形内，一点都不外溢。 */
 .image-lightbox-stage {
   position: relative;
   z-index: 1;
   display: inline-block;
   line-height: 0;
   max-width: min(96vw, 1600px);
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+}
+
+/* 加载占位：缩略图铺满大图那块矩形。原图流式刷出来的部分盖在它上面，
+   还没刷到的部分露出模糊底 —— 所以是「一条一条往下刷」，不是先空白再整张出现。 */
+.image-lightbox-ph {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(12px);
+  transition: opacity 320ms ease;
+}
+
+.image-lightbox-ph.is-done {
+  opacity: 0;
 }
 
 .image-lightbox-img {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   max-height: 88vh;
   width: auto;
   height: auto;
   display: block;
   object-fit: contain;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
-  /* 原图就绪前保持透明，让下面的模糊占位可见，就绪后淡入 */
-  opacity: 0;
-  transition: opacity 320ms ease;
-}
-
-.image-lightbox-img.is-loaded {
-  opacity: 1;
 }
 
 /* 大图右下角的 brandIcon 水印（图源、大小、透明度见 data/site.json → imageLightbox） */
