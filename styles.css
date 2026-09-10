@@ -2887,8 +2887,13 @@ body.lightbox-open {
     padding-inline: 12px;
   }
 
+  /* 手机端：按钮绝对定位贴右上角，logo 改为靠左并限宽，
+     避免居中的 logo/文字压到画廊按钮与主题按钮上 */
   .top-nav .brand {
-    justify-self: center;
+    justify-self: start;
+    max-width: calc(100% - 104px);
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .top-nav nav {

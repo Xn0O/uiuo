@@ -37,7 +37,7 @@
     "href": "./gallery.html",
     "label": "画廊",
     "image": "./assets/Home_Site/gallery.png",
-    "size": "48px",
+    "size": "60px",
     "fit": "cover"
   },
   "themeToggleButton": {
