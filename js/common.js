@@ -554,6 +554,7 @@
           applyNavGlassConfig(config);
           applyNavConfig(config);
           applyGalleryButton(config);
+          applyAboutButton(config);
           applyThemeToggleButton(config);
           setupAutoHideNav(config);
           setupBackToTop();
@@ -955,25 +956,26 @@
     setSiteText("footer-line2", footer.line2 ?? config?.footerLine2);
   }
 
-  function applyGalleryButton(config) {
-    const cfg = config?.galleryButton && typeof config.galleryButton === "object" ? config.galleryButton : {};
-    const buttons = document.querySelectorAll(".nav-gallery-btn");
+  // 导航栏上的图片按钮（画廊 / 关于）共用一套：无背景块无描边，只显示图片本体，
+  // 图片、尺寸、裁切、链接都读 data/site.json 里的同名字段。
+  function applyImageNavButton(selector, siteConfig, buttonCfg, fallbackLabel) {
+    const buttons = document.querySelectorAll(selector);
     if (!buttons.length) return;
 
     buttons.forEach((btn) => {
-      if (cfg.enabled === false) {
+      if (buttonCfg?.enabled === false) {
         btn.hidden = true;
         return;
       }
 
-      if (typeof cfg.href === "string" && cfg.href.trim()) {
-        btn.href = cfg.href.trim();
+      if (typeof buttonCfg?.href === "string" && buttonCfg.href.trim()) {
+        btn.href = buttonCfg.href.trim();
       }
 
       const img = btn.querySelector("img");
-      const imageValue = typeof cfg.image === "string" ? cfg.image.trim() : "";
+      const imageValue = typeof buttonCfg?.image === "string" ? buttonCfg.image.trim() : "";
       if (img) {
-        const url = resolveAssetUrl(imageValue, { config });
+        const url = resolveAssetUrl(imageValue, { config: siteConfig });
         if (url) {
           img.src = url;
           img.alt = "";
@@ -982,9 +984,9 @@
 
       // 图标按钮没有文字，label 用作可访问名 + 悬浮提示
       const labelText =
-        (typeof cfg.label === "string" && cfg.label.trim()) ||
+        (typeof buttonCfg?.label === "string" && buttonCfg.label.trim()) ||
         btn.getAttribute("aria-label") ||
-        "画廊";
+        fallbackLabel;
       btn.setAttribute("aria-label", labelText);
       btn.setAttribute("title", labelText);
 
@@ -994,9 +996,21 @@
           btn.style.setProperty(name, value.trim());
         }
       };
-      setProp("--gbtn-size", cfg.size);
-      setProp("--gbtn-fit", cfg.fit);
+      setProp("--gbtn-size", buttonCfg?.size);
+      setProp("--gbtn-fit", buttonCfg?.fit);
     });
+  }
+
+  function asConfigObject(value) {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  }
+
+  function applyGalleryButton(config) {
+    applyImageNavButton(".nav-gallery-btn", config, asConfigObject(config?.galleryButton), "画廊");
+  }
+
+  function applyAboutButton(config) {
+    applyImageNavButton(".nav-about-btn", config, asConfigObject(config?.aboutButton), "关于");
   }
 
   function markActiveNav() {

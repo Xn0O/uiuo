@@ -37,12 +37,20 @@
     "href": "./gallery.html",
     "label": "画廊",
     "image": "./assets/Home_Site/gallery.png",
-    "size": "60px",
+    "size": "48px",
+    "fit": "cover"
+  },
+  "aboutButton": {
+    "enabled": true,
+    "href": "./about.html",
+    "label": "关于",
+    "image": "./assets/Home_Toy/M_0.png",
+    "size": "48px",
     "fit": "cover"
   },
   "themeToggleButton": {
     "enabled": true,
-    "size": "48px",
+    "size": "40px",
     "fit": "cover",
     "images": {
       "light": "./assets/Home_Site/light.png",
@@ -51,8 +59,8 @@
   },
   "imageLightbox": {
     "enabled": true,
-    "size": "48px",
-    "opacity": 0.85,
+    "size": "72px",
+    "opacity": 1.0,
     "offset": "10px"
   },
   "footer": {
@@ -62,7 +70,8 @@
   "headerImages": {
     "default": "./assets/Home_Site/04.png",
     "home": "./assets/Home_Site/04.png",
-    "blog": "./assets/Home_Site/04.png"
+    "blog": "./assets/Home_Site/04.png",
+    "about": "./assets/Home_Site/04.png"
   },
   "pageHeroTexts": {
     "blog": {

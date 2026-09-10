@@ -2491,9 +2491,11 @@ body[data-page="blog"]:not(:has(.back-link)) .page-hero .hero-copy p {
   object-fit: contain;
 }
 
-/* 大图右下角的 brandIcon 水印（图源、大小、透明度见 data/site.json → imageLightbox） */
+/* 大图右下角的 brandIcon 水印（图源、大小、透明度见 data/site.json → imageLightbox）
+   层级：占位 0 < 原图 1 < 水印 2 —— 少了 z-index 会被带 z-index 的原图盖住 */
 .image-lightbox-brand {
   position: absolute;
+  z-index: 2;
   right: var(--lb-brand-offset, 10px);
   bottom: var(--lb-brand-offset, 10px);
   width: var(--lb-brand-size, 48px);
@@ -2936,11 +2938,13 @@ body.lightbox-open {
     padding-inline: 12px;
   }
 
-  /* 手机端：按钮绝对定位贴右上角，logo 改为靠左并限宽，
-     避免居中的 logo/文字压到画廊按钮与主题按钮上 */
+  /* 手机端：整组按钮绝对定位贴右上角，logo 改为靠左并限宽，
+     避免居中的 logo/文字压到按钮组上。
+     预留宽度 = 右侧 12px + 三个按钮（关于 48 + 画廊 48 + 主题 40）+ 两个 8px 间距
+     ——按钮尺寸改 site.json 后这里要跟着调，故多留 12px 余量 */
   .top-nav .brand {
     justify-self: start;
-    max-width: calc(100% - 104px);
+    max-width: calc(100% - 176px);
     overflow: hidden;
     white-space: nowrap;
   }
@@ -2955,13 +2959,6 @@ body.lightbox-open {
     flex-wrap: nowrap;
   }
   .top-nav nav a { font-size: 0.78rem; padding: 4px 6px; white-space: nowrap; }
-
-  .top-nav .theme-toggle {
-    position: absolute;
-    right: 12px;
-    top: 10px;
-    justify-self: auto;
-  }
 
   .blog-search-row {
     grid-template-columns: 1fr;
@@ -3146,7 +3143,8 @@ body.lightbox-open {
   border-radius: 4px;
   cursor: zoom-in;
 }
-.gallery-hero {
+.gallery-hero,
+.about-hero {
   margin-bottom: 1.5rem;
 }
 .gallery-desc {
@@ -3506,16 +3504,44 @@ body[data-page="blog"]:not(:has(.back-link)) .devlog-hero .hero-copy .eyebrow {
 }
 
 /* ==========================================================
-   gamedev 顶部导航：画廊图片按钮（紧挨主题切换按钮，在其左侧）
-   无背景块、无描边，只显示图片本体；大小/图片/裁切
-   可在 data/site.json → galleryButton 调整，
-   applyGalleryButton 会把配置写成下面这些 CSS 变量
+   gamedev 顶部导航右侧按钮组（画廊 / 关于 / 主题切换）
+   整组是一个 flex 容器：桌面端贴右对齐，手机端整组绝对定位到右上角，
+   所以加减按钮都不用再去算每个按钮的魔法偏移量。
    ========================================================== */
-.top-nav .nav-gallery-btn {
+.top-nav .nav-actions {
+  grid-column: 2 / -1;
   justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* 手机端整组按钮绝对定位到导航右上角。
+   必须写在上面这条桌面规则之后，否则被源码顺序覆盖掉。 */
+@media (max-width: 900px) {
+  .top-nav .nav-actions {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    grid-column: auto;
+    justify-self: auto;
+    gap: 8px;
+  }
+}
+
+/* ==========================================================
+   图片按钮（画廊 / 关于）：无背景块、无描边，只显示图片本体；
+   图片/大小/裁切在 data/site.json → galleryButton / aboutButton 调整，
+   applyImageNavButton 会把配置写成下面的 CSS 变量
+   ========================================================== */
+.top-nav .nav-gallery-btn,
+.top-nav .nav-about-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: none;
   width: var(--gbtn-size, 38px);
   height: var(--gbtn-size, 38px);
   padding: 0;
@@ -3524,7 +3550,8 @@ body[data-page="blog"]:not(:has(.back-link)) .devlog-hero .hero-copy .eyebrow {
   text-decoration: none;
 }
 
-.top-nav .nav-gallery-btn img {
+.top-nav .nav-gallery-btn img,
+.top-nav .nav-about-btn img {
   width: 100%;
   height: 100%;
   object-fit: var(--gbtn-fit, cover);
@@ -3533,11 +3560,13 @@ body[data-page="blog"]:not(:has(.back-link)) .devlog-hero .hero-copy .eyebrow {
   transition: transform 0.12s ease;
 }
 
-.top-nav .nav-gallery-btn:hover img {
+.top-nav .nav-gallery-btn:hover img,
+.top-nav .nav-about-btn:hover img {
   transform: scale(1.08);
 }
 
-.top-nav .nav-gallery-btn:focus-visible {
+.top-nav .nav-gallery-btn:focus-visible,
+.top-nav .nav-about-btn:focus-visible {
   outline: 2px solid #0055ff;
   outline-offset: 2px;
 }
@@ -3626,7 +3655,8 @@ html[data-theme="dark"] .btn.ghost:hover {
    gamedev：米色背景 + 铺满全页的静态网点（无鼠标轨迹/波纹）
    ========================================================== */
 body[data-page="blog"],
-body[data-page="gallery"] {
+body[data-page="gallery"],
+body[data-page="about"] {
   background-color: var(--bg);
   background-image:
     radial-gradient(circle, var(--grid-line-color) 2.2px, transparent 3px);
@@ -3637,41 +3667,34 @@ body[data-page="gallery"] {
 }
 
 body[data-page="blog"][data-theme="light"],
-body[data-page="gallery"][data-theme="light"] {
+body[data-page="gallery"][data-theme="light"],
+body[data-page="about"][data-theme="light"] {
   --bg: #faf6eb; /* 稍微米色（再浅一点） */
   --grid-line-color: rgba(0, 0, 0, 0.2);
 }
 
 body[data-page="blog"][data-theme="dark"],
-body[data-page="gallery"][data-theme="dark"] {
+body[data-page="gallery"][data-theme="dark"],
+body[data-page="about"][data-theme="dark"] {
   --grid-line-color: rgba(255, 255, 255, 0.13);
 }
 
 /* 背景圆点 → 正方形网点：每 36px 格内一枚 5px 方块。
    SVG 里的色值是写死的（CSS 变量传不进 data-uri），故浅/深两套各一张。 */
 body[data-page="blog"],
-body[data-page="gallery"] {
+body[data-page="gallery"],
+body[data-page="about"] {
   background-image: none;
 }
 body[data-page="blog"][data-theme="light"],
-body[data-page="gallery"][data-theme="light"] {
+body[data-page="gallery"][data-theme="light"],
+body[data-page="about"][data-theme="light"] {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2236%22%20height%3D%2236%22%20viewBox%3D%220%200%2036%2036%22%3E%3Crect%20x%3D%2215.5%22%20y%3D%2215.5%22%20width%3D%225%22%20height%3D%225%22%20fill%3D%22%23000%22%20fill-opacity%3D%220.2%22%2F%3E%3C%2Fsvg%3E");
 }
 body[data-page="blog"][data-theme="dark"],
-body[data-page="gallery"][data-theme="dark"] {
+body[data-page="gallery"][data-theme="dark"],
+body[data-page="about"][data-theme="dark"] {
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2236%22%20height%3D%2236%22%20viewBox%3D%220%200%2036%2036%22%3E%3Crect%20x%3D%2215.5%22%20y%3D%2215.5%22%20width%3D%225%22%20height%3D%225%22%20fill%3D%22%23fff%22%20fill-opacity%3D%220.13%22%2F%3E%3C%2Fsvg%3E");
-}
-
-/* ==========================================================
-   gamedev：手机端主题切换按钮竖直居中在导航条内
-   本站导航条很矮（只有居中品牌栏），基线规则 fixed top:10px
-   会让 36px 高的切换按钮探出导航底边，改成按导航条高度居中。
-   ========================================================== */
-@media (max-width: 900px) {
-  .top-nav .theme-toggle {
-    top: 50%;
-    transform: translateY(-50%);
-  }
 }
 
 /* ==========================================================
@@ -3797,15 +3820,6 @@ html {
 }
 
 /* ==========================================================
-   gamedev：手机端顶部导航变单列后，主题按钮改绝对定位右上角，
-   画廊图片按钮贴它左侧、一并垂直居中
+   gamedev：手机端顶部导航变单列后，按钮组的定位见上方
+   @media (max-width: 900px) 里的 .top-nav .nav-actions
    ========================================================== */
-@media (max-width: 900px) {
-  .top-nav .nav-gallery-btn {
-    position: absolute;
-    right: calc(12px + 40px + 8px);
-    top: 50%;
-    transform: translateY(-50%);
-    justify-self: auto;
-  }
-}
