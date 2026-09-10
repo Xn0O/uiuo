@@ -1684,6 +1684,11 @@
     nextBtn.setAttribute("aria-label", "下一张");
     nextBtn.innerHTML = "›";
 
+    // 模糊占位层：原图加载期间，用缩略图铺满整屏做模糊底，加载完淡出
+    const blurLayer = document.createElement("div");
+    blurLayer.className = "image-lightbox-blur";
+    blurLayer.setAttribute("aria-hidden", "true");
+
     const img = document.createElement("img");
     img.className = "image-lightbox-img";
     img.alt = "";
@@ -1739,7 +1744,32 @@
       if (index < 0 || index >= gallerySources.length) return;
       galleryIndex = index;
       var entry = gallerySources[index];
+
+      // 先亮出模糊占位（缩略图），原图加载完成后再淡入清晰版
+      const thumbSrc = String(entry.thumb || "").trim();
+      if (thumbSrc) {
+        blurLayer.style.backgroundImage = `url("${thumbSrc}")`;
+        blurLayer.classList.add("is-visible");
+      } else {
+        blurLayer.style.backgroundImage = "";
+        blurLayer.classList.remove("is-visible");
+      }
+
+      img.classList.remove("is-loaded");
+      img.onload = () => {
+        img.classList.add("is-loaded");
+        blurLayer.classList.remove("is-visible");
+      };
+      img.onerror = () => {
+        // 原图失败时保留模糊占位，至少不是空白
+        img.classList.remove("is-loaded");
+      };
       img.src = entry.src;
+      if (img.complete && img.naturalWidth > 0) {
+        img.classList.add("is-loaded");
+        blurLayer.classList.remove("is-visible");
+      }
+
       img.alt = entry.alt || "大图预览";
       if (entry.alt) {
         caption.textContent = entry.alt;
@@ -1759,7 +1789,7 @@
       if (galleryIndex < gallerySources.length - 1) showImage(galleryIndex + 1);
     }
 
-    mask.append(closeBtn, prevBtn, stage, nextBtn, caption);
+    mask.append(blurLayer, closeBtn, prevBtn, stage, nextBtn, caption);
     document.body.appendChild(mask);
 
     const close = () => {
@@ -1768,6 +1798,9 @@
       document.body.classList.remove("lightbox-open");
       img.removeAttribute("src");
       img.alt = "";
+      img.classList.remove("is-loaded");
+      blurLayer.classList.remove("is-visible");
+      blurLayer.style.backgroundImage = "";
       caption.textContent = "";
       caption.hidden = true;
       gallerySources = [];
@@ -1788,8 +1821,8 @@
       else if (event.key === "ArrowRight") { goNext(); }
     });
 
-    mask.openImage = (src, alt) => {
-      gallerySources = [{ src: src, alt: alt || "" }];
+    mask.openImage = (src, alt, thumb) => {
+      gallerySources = [{ src: src, alt: alt || "", thumb: thumb || "" }];
       galleryIndex = 0;
       showImage(0);
       mask.classList.add("open");
@@ -1844,9 +1877,12 @@
       const open = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        const src = String(img.currentSrc || img.src || "").trim();
+        // 大图优先用 data-full-src（网格里显示的是缩略图）；
+        // data-thumb-src 作为大图加载期间的模糊占位
+        const src = String(img.dataset.fullSrc || img.currentSrc || img.src || "").trim();
         if (!src) return;
-        lightbox.openImage(src, img.alt || "");
+        const thumb = String(img.dataset.thumbSrc || "").trim();
+        lightbox.openImage(src, img.alt || "", thumb);
       };
 
       img.addEventListener("click", open);

@@ -1,6 +1,9 @@
 {
   "title": "画廊",
   "items": [
-    "./assets/art/2026_1.png"
+    {
+      "src": "./assets/art/2026_1.png",
+      "thumb": "./assets/art/thumbs/2026_1.jpg?v=8727ce12"
+    }
   ]
 }
