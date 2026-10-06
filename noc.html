@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <title>NOC TIDE</title>
+    <!-- 纯阅读页：不挂站点导航/主题/字体，自成一体。
+         内容由 data/noc.json 驱动，换 PDF 后重跑 tools/pdf_build.py 即可，本文件不用动。 -->
+    <style>
+      :root {
+        /* 设计稿宽度 960pt；源图按 2 倍渲染（1920px），所以这里按 960 显示正好视网膜清晰 */
+        --reading-width: 960px;
+        --ph-blur: 12px;
+        /* 页面底色由 js/noc.js 按封面取色覆盖，这里只是它在清单到位前的兜底 */
+        --reading-bg: #1d1c1c;
+      }
+
+      html {
+        background: var(--reading-bg);
+      }
+
+      body {
+        margin: 0;
+        background: var(--reading-bg);
+        color: #eee;
+        font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+        /* 页面纵向堆叠，零间隙 —— 逐页拼回原稿那张连续长图 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .reading {
+        width: min(100%, var(--reading-width));
+        margin: 0 auto;
+      }
+
+      /* 每页：占位层铺满这一页的框，原图流式刷出来的部分盖在它上面。
+         底色跟着封面走，页与页之间不会露出黑缝。 */
+      .page {
+        position: relative;
+        margin: 0;
+        aspect-ratio: 16 / 9;
+        background: var(--reading-bg);
+        overflow: hidden;
+      }
+
+      .page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: var(--ph, none);
+        background-position: center;
+        background-size: cover;
+        filter: blur(var(--ph-blur));
+        transition: opacity 320ms ease;
+      }
+
+      .page.is-ready::before {
+        opacity: 0;
+      }
+
+      .page img {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: auto;
+        /* 别让图被拖走（拖出去会留下半透明的残影，看着像页面坏了） */
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .tip {
+        width: min(100%, var(--reading-width));
+        padding: 24px 16px;
+        text-align: center;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #9a9a9a;
+        white-space: pre-line;
+      }
+
+      /* 打印时只留图 */
+      @media print {
+        html,
+        body {
+          background: #fff;
+        }
+        .tip {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="reading" id="reading"></main>
+
+    <script src="./js/noc.js?v=3"></script>
+  </body>
+</html>

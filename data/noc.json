@@ -1,0 +1,36 @@
+{
+  "title": "NOC TIDE",
+  "bg": "#1d1c1c",
+  "pages": [
+    {
+      "src": "./assets/noc/page-1.png?v=3569032f",
+      "w": 1918,
+      "h": 1078,
+      "thumb": "./assets/noc/thumbs/page-1.jpg?v=c35126cd"
+    },
+    {
+      "src": "./assets/noc/page-2.png?v=91efc12b",
+      "w": 1918,
+      "h": 1078,
+      "thumb": "./assets/noc/thumbs/page-2.jpg?v=a7f111b9"
+    },
+    {
+      "src": "./assets/noc/page-3.png?v=3a2392d3",
+      "w": 1918,
+      "h": 1078,
+      "thumb": "./assets/noc/thumbs/page-3.jpg?v=6d78d487"
+    },
+    {
+      "src": "./assets/noc/page-4.png?v=4ec6a96b",
+      "w": 1918,
+      "h": 1078,
+      "thumb": "./assets/noc/thumbs/page-4.jpg?v=fc357e5c"
+    },
+    {
+      "src": "./assets/noc/page-5.png?v=5a24663b",
+      "w": 1918,
+      "h": 1078,
+      "thumb": "./assets/noc/thumbs/page-5.jpg?v=c8ace4fb"
+    }
+  ]
+}

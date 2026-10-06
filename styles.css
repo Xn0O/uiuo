@@ -2489,6 +2489,9 @@ body[data-page="blog"]:not(:has(.back-link)) .page-hero .hero-copy p {
   height: auto;
   display: block;
   object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* 大图右下角的 brandIcon 水印（图源、大小、透明度见 data/site.json → imageLightbox）

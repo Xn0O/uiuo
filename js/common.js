@@ -1701,6 +1701,9 @@
     const img = document.createElement("img");
     img.className = "image-lightbox-img";
     img.alt = "";
+    // 别让大图被拖走：拖出去整张图会跟着鼠标跑，看着像灯箱坏了
+    img.draggable = false;
+    img.setAttribute("draggable", "false");
 
     // 加载占位：缩略图铺在大图那一块矩形上（inset:0，尺寸严格等于大图），
     // 原图流式刷出来的部分会盖在它上面，没刷到的部分露出模糊底，不会空白。
