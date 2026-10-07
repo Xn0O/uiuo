@@ -14,6 +14,8 @@
         --ph-blur: 12px;
         
         --reading-bg: #1d1c1c;
+        /* 页间隔：留出底色 */
+        --page-gap: 32px;
       }
 
       html {
@@ -34,10 +36,14 @@
       .reading {
         width: min(100%, var(--reading-width));
         margin: 0 auto;
+        /* 每页各自成块，之间隔出底色 */
+        display: flex;
+        flex-direction: column;
+        gap: var(--page-gap);
       }
 
       /* 每页：占位层铺满这一页的框，原图流式刷出来的部分盖在它上面。
-         底色跟着封面走，页与页之间不会露出黑缝。 */
+         底色跟着封面走 */
       .page {
         position: relative;
         margin: 0;
@@ -88,6 +94,10 @@
         html,
         body {
           background: #fff;
+        }
+        /* 打印时还是拼回一整张，不留缝 */
+        .reading {
+          gap: 0;
         }
         .tip {
           display: none;
