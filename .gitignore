@@ -5,7 +5,12 @@ tools/gallery_build.py
 刷新画廊.command
 tools/__pycache__/pdf_build.cpython-314.pyc
 tools/pdf_build.py
-刷新PDF.command
+tools/__pycache__/pdf_to_html.cpython-314.pyc
+tools/pdf_to_html.py
+tools/__pycache__/pptx_to_html.cpython-314.pyc
+tools/pptx_to_html.py
+刷新网页.command
 js/common.js
 js/common.js
 noc.pdf
+NOCTIDE.pptx
