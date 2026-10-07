@@ -7,6 +7,36 @@
     <meta name="googlebot" content="noindex, nofollow">
     <title>NOCTIDE</title>
     <style>
+      @font-face {
+        font-family: "NocSerif";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local("Songti SC Regular"), url(./assets/noc/fonts/noc-serif-400.woff2) format("woff2");
+      }
+      @font-face {
+        font-family: "NocSerif";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: local("Songti SC Bold"), url(./assets/noc/fonts/noc-serif-700.woff2) format("woff2");
+      }
+      @font-face {
+        font-family: "NocSerif";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        unicode-range: U+2726;
+        src: local("Songti SC Regular"), url(./assets/noc/fonts/noc-extras.woff2) format("woff2");
+      }
+      @font-face {
+        font-family: "NocSerif";
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        unicode-range: U+2726;
+        src: local("Songti SC Bold"), url(./assets/noc/fonts/noc-extras.woff2) format("woff2");
+      }
       :root {
         --reading-width: 960px;
         --reading-bg: #1d1c1c;
@@ -39,7 +69,7 @@
         position: absolute;
         overflow: visible;
         color: #000000;
-        font-family: "Songti SC", "SimSun", "STSong", "Noto Serif CJK SC", "Arial Unicode MS", serif;
+        font-family: "NocSerif", "Songti SC", "SimSun", "STSong", "Noto Serif CJK SC", "Arial Unicode MS", serif;
         font-size: 1.88cqw;
         user-select: text;
         -webkit-user-select: text;

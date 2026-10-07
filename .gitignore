@@ -9,6 +9,8 @@ tools/__pycache__/pdf_to_html.cpython-314.pyc
 tools/pdf_to_html.py
 tools/__pycache__/pptx_to_html.cpython-314.pyc
 tools/pptx_to_html.py
+tools/__pycache__/subset_font.cpython-314.pyc
+tools/subset_font.py
 刷新网页.command
 js/common.js
 js/common.js
