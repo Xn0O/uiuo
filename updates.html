@@ -37,9 +37,6 @@
         width: min(100%, 960px);
         margin: 0 auto;
         padding: 48px 16px 64px;
-        display: grid;
-        justify-items: center;
-        gap: 4px;
         text-align: center;
       }
       .updates h1 {
@@ -48,15 +45,54 @@
         font-weight: 400;
         color: #b3b3b3;
       }
-      .updates p { margin: 0; font-size: 0.9rem; }
+      .upd { width: 100%; max-width: 32em; margin: 6px auto 0; }
+      .upd summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 6px;
+        font-size: 0.9rem;
+        color: #b3b3b3;
+      }
+      .upd summary::-webkit-details-marker { display: none; }
+      .upd .chev {
+        width: 6px;
+        height: 6px;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        transform: rotate(45deg);
+        transition: transform 0.2s ease;
+      }
+      .upd[open] .chev { transform: rotate(-135deg); }
+      .upd .note {
+        margin: 8px 0 0;
+        padding: 12px 14px;
+        text-align: left;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--reading-bg);
+        background: #d6d6d6;
+      }
     </style>
   </head>
   <body>
     <main class="updates">
       <h1>更新记录 · 共 3 次</h1>
-      <p>2026-10-08 · 增加了更新记录页面，也就是你看到的这个页面。</p>
-      <p>2026-10-07 · 是的没错，网页的内容排版是我用PPT做的。</p>
-      <p>2026-10-06 · 页面搭建</p>
+      <details class="upd">
+        <summary>2026-10-08<span class="chev" aria-hidden="true"></span></summary>
+        <p class="note">增加了更新记录页面，也就是你看到的这个页面。</p>
+      </details>
+      <details class="upd">
+        <summary>2026-10-07<span class="chev" aria-hidden="true"></span></summary>
+        <p class="note">是的没错，网页的内容排版是我用PPT做的。</p>
+      </details>
+      <details class="upd">
+        <summary>2026-10-06<span class="chev" aria-hidden="true"></span></summary>
+        <p class="note">页面搭建</p>
+      </details>
     </main>
   </body>
 </html>
